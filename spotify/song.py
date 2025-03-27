@@ -1,5 +1,7 @@
 import datetime
 import os
+import subprocess
+from time import sleep
 
 import requests
 from telethon.tl import types
@@ -15,6 +17,9 @@ from models import session, User, SongRequest
 from spotify import SPOTIFY, GENIUS
 from telegram import DB_CHANNEL_ID, CLIENT, BOT_ID
 import browser_cookie3
+
+from telegram.new_message import download
+
 if not os.path.exists('covers'):
     os.makedirs('covers')
 
@@ -99,27 +104,15 @@ class Song:
             return None
 
     def yt_download(self, yt_link=None):
-        options = {
-            # PERMANENT options
-            'format': 'bestaudio/best',
-            'keepvideo': True,
-            'outtmpl': f'{self.path}/{self.id}',
-            'postprocessors': [{
-                'key': 'FFmpegExtractAudio',
-                'preferredcodec': 'mp3',
-                'preferredquality': '320'
-            }],
-        }
-
         if yt_link is None:
             yt_link = self.yt_link()
 
-        cookies = self.get_cookies_from_browser()
+        download_command = ['yt-dlp' , '--cookies-from-browser' ,'firefox' ,yt_link]
+        subprocess.run(download_command ,cwd=self.path)
+        print("end downloading: " + yt_link)
 
-        if cookies:
-            options['cookiefile'] = cookies
-        with yt_dlp.YoutubeDL(options) as mp3:
-            mp3.download([yt_link])
+
+        sleep(500)
 
     def lyrics(self):
         try:

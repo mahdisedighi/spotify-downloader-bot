@@ -1,4 +1,3 @@
-from enum import CONFORM
 
 WELCOME_MESSAGE = '''Hi😃👋
 Send me a link from spotify and I'll download it for you.
