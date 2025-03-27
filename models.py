@@ -10,7 +10,10 @@ Base = declarative_base()
 class User(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
-    telegram_id = Column(Integer, unique=True)
+    user_id = Column(Integer, unique=True , nullable=False)
+    referral_code = Column(String, unique=True, nullable=False)
+    referrer_id = Column(Integer, ForeignKey('users.id'), nullable=True)
+    referred_users = relationship('User', backref='referrer', remote_side=[id])
 
 
 # Define the Song table

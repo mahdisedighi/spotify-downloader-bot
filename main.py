@@ -6,3 +6,4 @@ if __name__ == '__main__':
     print('[BOT] Starting...')
     CLIENT.start(bot_token=BOT_TOKEN)
     CLIENT.run_until_disconnected()
+# "https://www.youtube.com/watch?v=Uw7otnDIn-k&pp=ygUVWWUgU2FsaWUgQXJtaW4gWmFyZWVp"

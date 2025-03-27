@@ -1,9 +1,10 @@
-from decouple import config
 from telethon import TelegramClient
 
-BOT_TOKEN = config("BOT_TOKEN")
-API_ID = config("TELEGRAM_API_ID")
-API_HASH = config('TELEGRAM_API_HASH')
+BOT_TOKEN = '7873285960:AAHpuYqVrRd5TC-j7-Wengslh0ZrQyKr_EM'
+API_ID = '22113281'
+API_HASH = 'ddf5426b45076b062f7a9c4ba7d5939c'
 CLIENT = TelegramClient('session', API_ID, API_HASH)
-DB_CHANNEL_ID = int(config('DB_CHANNEL_ID'))
-BOT_ID = config('BOT_ID')
+DB_CHANNEL_ID = int('1002687622470')
+BOT_ID = '7873285960'
+CHANNEL = "@mahdisedighipromote"
+PROMOTE_CHANNEL_LINK = "https://t.me/mahdisedighipromote"

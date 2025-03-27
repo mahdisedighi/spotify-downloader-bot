@@ -34,7 +34,7 @@ class Album:
                    [Button.url(f'🎵Listen on Spotify', self.spotify_link)],
                    ]
 
-        return message, self.album_cover, buttons
+        return message, self.album_cover, buttons , self.total_tracks
 
     async def artist_buttons_telethon_templates(self):
         message = f"{self.album_name} album Artist's"

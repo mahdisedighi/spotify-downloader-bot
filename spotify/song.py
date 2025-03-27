@@ -14,7 +14,7 @@ from consts import DOWNLOADING, UPLOADING, PROCESSING, ALREADY_IN_DB, NOT_IN_DB,
 from models import session, User, SongRequest
 from spotify import SPOTIFY, GENIUS
 from telegram import DB_CHANNEL_ID, CLIENT, BOT_ID
-
+import browser_cookie3
 if not os.path.exists('covers'):
     os.makedirs('covers')
 
@@ -90,6 +90,14 @@ class Song:
         yt_link = str("https://www.youtube.com/" + yt_url)
         return yt_link
 
+    def get_cookies_from_browser(self):
+        try:
+            cookies = browser_cookie3.firefox()
+            return cookies
+        except Exception as e:
+            print(f"Error loading cookies from browser: {e}")
+            return None
+
     def yt_download(self, yt_link=None):
         options = {
             # PERMANENT options
@@ -102,8 +110,14 @@ class Song:
                 'preferredquality': '320'
             }],
         }
+
         if yt_link is None:
             yt_link = self.yt_link()
+
+        cookies = self.get_cookies_from_browser()
+
+        if cookies:
+            options['cookiefile'] = cookies
         with yt_dlp.YoutubeDL(options) as mp3:
             mp3.download([yt_link])
 
@@ -168,18 +182,19 @@ class Song:
         return message, buttons
 
     def save_db(self, user_id: int, song_id_in_group: int):
-        user = session.query(User).filter_by(telegram_id=user_id).first()
-        if not user:
-            user = User(telegram_id=user_id)
-            session.add(user)
-            session.commit()
-        session.add(SongRequest(
-            spotify_id=self.id,
-            user_id=user.id,
-            song_id_in_group=song_id_in_group,
-            group_id=DB_CHANNEL_ID
-        ))
-        session.commit()
+        # user = session.query(User).filter_by(user_id=user_id).first()
+        # if not user:
+        #     user = User(user_id=user_id)
+        #     session.add(user)
+        #     session.commit()
+        # session.add(SongRequest(
+        #     spotify_id=self.id,
+        #     user_id=user.user_id,
+        #     song_id_in_group=song_id_in_group,
+        #     group_id=DB_CHANNEL_ID
+        # ))
+        # session.commit()
+        pass
 
     @staticmethod
     async def progress_callback(processing, sent_bytes, total):
@@ -208,6 +223,7 @@ class Song:
                 await processing.delete()
                 await event.respond(f"{song.track_name}\n{SONG_NOT_FOUND}")
                 return
+
             file_path = song.download(yt_link=yt_link)
             await processing.edit(UPLOADING)
 

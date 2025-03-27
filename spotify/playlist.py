@@ -32,7 +32,7 @@ class Playlist:
                    [Button.inline(f'🖼️Download Playlist Image!', data=f"download_playlist_image:{self.id}")],
                    [Button.url(f'🎵Listen on Spotify', self.spotify_link)],
                    ]
-        return message, buttons
+        return message, buttons , self.track_count
 
     @staticmethod
     def get_playlist_tracks(link):
